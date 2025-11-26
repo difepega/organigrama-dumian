@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Organigrama institucional DUMIAN MEDICAL S.A.S.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fuente: Open Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Librerías para exportar a PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    :root {
+      /* Paleta basada en #194856 */
+      --primary: #194856;
+      --primary-dark: #12323f;
+      --primary-darker: #0c2330;
+
+      --directivo-border: #38bdf8;
+      --directivo-bg: rgba(56, 189, 248, 0.16);
+
+      --asesor-border: #a855f7;
+      --asesor-bg: rgba(168, 85, 247, 0.16);
+
+      --operativo-border: #16a34a;
+      --operativo-bg: rgba(22, 163, 74, 0.16);
+
+      --bg-body: #d8e9f2;
+      --bg-main: #ffffff;
+      --bg-card: #f8fafc;
+
+      --border-subtle: rgba(148, 163, 184, 0.6);
+      --text-main: #111827;
+      --text-muted: #6b7280;
+
+      --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.35);
+      --radius-lg: 18px;
+      --transition-fast: 0.2s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1200px;
+      background: #ffffff;
+      border-radius: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .app-header {
+      padding: 16px 24px;
+      background: linear-gradient(
+        135deg,
+        var(--primary-darker),
+        var(--primary-dark)
+      );
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .app-title-group h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0.03em;
+      font-weight: 700;
+    }
+
+    .app-subtitle {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    .app-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .app-logo {
+      height: 34px;
+      max-height: 34px;
+      width: auto;
+      display: block;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 11px;
+      align-items: center;
+      color: #e5e7eb;
+    }
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--directivo-border);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.16);
+    }
+    .legend-dot.secondary {
+      background: var(--asesor-border);
+      box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.16);
+    }
+    .legend-dot.tertiary {
+      background: var(--operativo-border);
+      box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.16);
+    }
+
+    .app-main {
+      padding: 12px 18px 10px;
+      background: var(--bg-main);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 6px;
+      gap: 8px;
+    }
+
+    .export-btn {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: rgba(25, 72, 86, 0.08);
+      color: #0f172a;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition:
+        background var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+    }
+
+    .export-btn:hover {
+      background: rgba(25, 72, 86, 0.16);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .export-btn-icon {
+      font-size: 14px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f2f7fa;
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      align-self: flex-start;
+    }
+
+    .hint-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--primary);
+      background: #ffffff;
+    }
+
+    .chart-viewport {
+      position: relative;
+      margin-top: 4px;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(148, 163, 184, 0.16) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          rgba(148, 163, 184, 0.16) 1px,
+          transparent 1px
+        );
+      background-size: 32px 32px;
+      background-color: #f3f4f6;
+      overflow: hidden;
+      min-height: 480px;
+      cursor: default;
+    }
+
+    .chart-canvas {
+      transform-origin: 0 0;
+      display: inline-block;
+      padding: 40px 80px 60px 80px;
+      position: relative;
+    }
+
+    .org-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      position: relative;
+    }
+
+    /* Nivel superior (solo para la raíz) */
+    .level {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 28px;
+      flex-wrap: nowrap;
+      position: relative;
+    }
+
+    .level-label {
+      position: absolute;
+      left: -80px;
+      top: -18px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    .level-label-line {
+      height: 1px;
+      width: 38px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(148, 163, 184, 0.9)
+      );
+    }
+
+    .node {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 220px;
+      max-width: 260px;
+      flex: 0 0 auto;
+    }
+
+    .node-connector {
+      width: 1px;
+      height: 18px;
+      background: rgba(148, 163, 184, 0.7);
+      margin-bottom: 4px;
+    }
+
+    .node-card {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: radial-gradient(
+          circle at top,
+          rgba(25, 72, 86, 0.04),
+          transparent 60%
+        ),
+        var(--bg-card);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast),
+        background 0.25s ease-out;
+    }
+
+    /* Colores por data-node-tag-primary */
+    .node[data-node-tag-primary="ESTRATEGIA"] .node-card,
+    .node[data-node-tag-primary="MISIONAL"] .node-card {
+      border-color: var(--directivo-border);
+      background:
+        radial-gradient(circle at top, rgba(25, 72, 86, 0.08), transparent 58%),
+        #ffffff;
+    }
+    .node[data-node-tag-primary="ASESOR"] .node-card,
+    .node[data-node-tag-primary="SOPORTE"] .node-card,
+    .node[data-node-tag-primary="CONTROL"] .node-card {
+      border-color: var(--asesor-border);
+      background:
+        radial-gradient(circle at top, rgba(31, 122, 148, 0.1), transparent 60%),
+        #ffffff;
+    }
+    .node[data-node-tag-primary="OPERATIVO"] .node-card {
+      border-color: var(--operativo-border);
+      background:
+        radial-gradient(circle at top, rgba(22, 163, 74, 0.11), transparent 60%),
+        #ffffff;
+    }
+
+    /* Mismo color para la etiqueta node-tag visual */
+    .node[data-node-tag-primary="ESTRATEGIA"] .node-tag,
+    .node[data-node-tag-primary="MISIONAL"] .node-tag {
+      border-color: var(--directivo-border);
+      color: var(--primary-darker);
+      background: var(--directivo-bg);
+    }
+    .node[data-node-tag-primary="ASESOR"] .node-tag,
+    .node[data-node-tag-primary="SOPORTE"] .node-tag,
+    .node[data-node-tag-primary="CONTROL"] .node-tag {
+      border-color: var(--asesor-border);
+      color: #0f172a;
+      background: var(--asesor-bg);
+    }
+    .node[data-node-tag-primary="OPERATIVO"] .node-tag {
+      border-color: var(--operativo-border);
+      color: #14532d;
+      background: var(--operativo-bg);
+    }
+
+    .node-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      opacity: 0;
+      background: radial-gradient(
+        circle at top,
+        rgba(25, 72, 86, 0.18),
+        transparent 55%
+      );
+      transition:
+        opacity 0.4s ease-out,
+        transform 0.4s ease-out;
+      transform: translate3d(0, 10px, 0);
+    }
+
+    .node-card:hover::before {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .node-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.25);
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+
+    .node-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .node-title {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: #0f172a;
+    }
+
+    .node-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--text-muted);
+      white-space: nowrap;
+      background: #ffffff;
+    }
+
+    .node-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 1.2em;
+    }
+
+    .node-meta-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 190px;
+    }
+
+    /* Contenedor de hijos (una fila por padre + nivel) */
+    .children-row {
+      display: none;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: nowrap;
+      width: 100%;
+      margin-top: 24px;
+      position: relative;
+    }
+
+    .children-row.visible {
+      display: flex;
+    }
+
+    /* Conector padre-hijos */
+    .children-connector {
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 22px;
+      width: 40px; /* base; se ajusta con data-children */
+    }
+
+    .children-connector::before {
+      /* Línea vertical desde el padre hacia el tramo horizontal */
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 1px;
+      height: 12px;
+      background: rgba(148, 163, 184, 0.9);
+    }
+
+    .children-connector::after {
+      /* Tramo horizontal hacia los hijos */
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: rgba(148, 163, 184, 0.9);
+    }
+
+    /* Relación indirecta futura */
+    .children-connector[data-hierarchy="indirecta"]::after {
+      border-top: 1px dashed rgba(148, 163, 184, 0.9);
+      background: transparent;
+    }
+
+    /* Ancho del tramo horizontal según número de hijos */
+    .children-connector[data-children="1"] { width: 0; }
+    .children-connector[data-children="2"] { width: 80px; }
+    .children-connector[data-children="3"] { width: 140px; }
+    .children-connector[data-children="4"] { width: 200px; }
+    .children-connector[data-children="5"] { width: 260px; }
+    .children-connector[data-children="6"] { width: 320px; }
+
+    .node[data-expanded="true"] .node-card {
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.22);
+    }
+
+    /* ===== División especial para hijos de Gerencia (CONTROL izq, ASESOR der) ===== */
+    .children-row.gerencia-split {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      column-gap: 40px;
+      align-items: start;
+      justify-content: center;
+    }
+
+    /* Bloque izquierdo: CONTROL */
+    .gerencia-split .node[data-node-tag-primary="CONTROL"] {
+      grid-column: 1;
+    }
+
+    /* Bloque central: cargos misionales/estratégicos/soporte */
+    .gerencia-split
+      .node:not([data-node-tag-primary="ASESOR"]):not([data-node-tag-primary="CONTROL"]) {
+      grid-column: 2;
+    }
+
+    /* Bloque derecho: ASESORES */
+    .gerencia-split .node[data-node-tag-primary="ASESOR"] {
+      grid-column: 3;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tooltip {
+      position: fixed;
+      max-width: 320px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: #020617;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      color: #e5e7eb;
+      font-size: 11px;
+      line-height: 1.4;
+      box-shadow: 0 18px 36px rgba(15, 23, 42, 0.8);
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transform: translate3d(0, 6px, 0);
+      transition:
+        opacity 0.16s ease-out,
+        transform 0.18s ease-out;
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .tooltip-title {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #bfdbfe;
+      margin-bottom: 4px;
+    }
+
+    .tooltip-role {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: #e5e7eb;
+    }
+
+    .tooltip-body {
+      color: #d1d5db;
+    }
+
+    .app-footer {
+      padding: 6px 16px 10px;
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      background: #f9fafb;
+      font-size: 10px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 920px) {
+      body {
+        padding: 10px;
+      }
+      .app-shell {
+        border-radius: 18px;
+      }
+      .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .app-brand {
+        align-items: flex-start;
+      }
+      .chart-canvas {
+        padding: 28px 40px 40px 40px;
+      }
+      .level {
+        flex-wrap: wrap;
+        gap: 18px;
+      }
+      .children-row {
+        flex-wrap: wrap;
+        gap: 18px;
+      }
+      .children-row.gerencia-split {
+        grid-template-columns: 1fr;
+        row-gap: 22px;
+      }
+      .children-connector {
+        width: 120px !important; /* simplificación visual en pantallas pequeñas */
+      }
+    }
+
+    @media (max-width: 600px) {
+      .chart-canvas {
+        padding: 24px 24px 32px 24px;
+      }
+      .node {
+        min-width: 200px;
+      }
+      .children-connector {
+        width: 80px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <header class="app-header">
+      <div class="app-title-group">
+        <h1>Organigrama institucional DUMIAN MEDICAL S.A.S.</h1>
+        <p class="app-subtitle">
+          Versión 20251120 | Elaborado por Ing. Esp. Adelaida Mayorga Isaza |
+          Aprobado por Ing. Esp. Carolina González Andrade.
+        </p>
+      </div>
+      <div class="app-brand">
+        <img
+          src="https://www.dumianmedical.net/web/wp-content/uploads/2023/11/logo_blanco-1.png"
+          alt="Logo DUMIAN MEDICAL S.A.S."
+          class="app-logo"
+        />
+        <div class="legend">
+          <span><span class="legend-dot"></span> Directivo/Estrategia</span>
+          <span><span class="legend-dot secondary"></span> Asesoría/Soporte/Control</span>
+          <span><span class="legend-dot tertiary"></span> Nivel operativo/sedes</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="toolbar">
+        <button id="export-pdf" class="export-btn">
+          <span class="export-btn-icon">⬇</span>
+          Exportar organigrama a PDF
+        </button>
+      </div>
+
+      <div class="hint">
+        <div class="hint-icon">?</div>
+        <span>
+          Haga CLIC sobre cada cargo si desea desplegar sus respectivos equipos; desplace el cursor sobre cada cargo para visualizar la misión.
+        </span>
+      </div>
+
+      <div class="chart-viewport" id="chart-viewport">
+        <div class="chart-canvas" id="chart-canvas">
+          <section class="org-chart" aria-label="Organigrama de la empresa" id="org-chart">
+            <!-- Aquí se inyecta el organigrama dinámicamente desde ORG_DATA -->
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      Herramienta web desarrollada en CodePen por Diego Fernando Pérez G. MD. MSc.
+      para DUMIAN MEDICAL S.A.S. | Todos los derechos reservados | 2025
+    </footer>
+
+    <div class="tooltip" id="tooltip" role="status" aria-live="polite">
+      <div class="tooltip-title">MISIÓN DEL CARGO</div>
+      <div class="tooltip-role" id="tooltip-role"></div>
+      <div class="tooltip-body" id="tooltip-body"></div>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // 1. ORG_DATA (fuente única)
+    // =========================
+    const ORG_DATA = [
+      {
+        id: 1,
+        parentId: null,
+        level: 1,
+        sublevel: 1,
+        visual_side: "CENTER",
+        visual_order: 1,
+        node_tag_primary: "ESTRATEGIA",
+        title: "Asamblea de accionistas",
+        mission:
+          "Definir el rumbo estratégico de la empresa, aprobar las decisiones más relevantes y velar por la protección del patrimonio de los accionistas.",
+        hierarchy: "Por encima del node_id = 2 con relación directa sobre ella, bidireccional"
+      },
+      {
+        id: 2,
+        parentId: 1,
+        level: 2,
+        sublevel: 1,
+        visual_side: "CENTER",
+        visual_order: 1,
+        node_tag_primary: "ESTRATEGIA",
+        title: "Gerencia General",
+        mission: "En construcción.",
+        hierarchy: ""
+      },
+      {
+        id: 7,
+        parentId: 2,
+        level: 3,
+        sublevel: 1,
+        visual_side: "LEFT",
+        visual_order: 1,
+        node_tag_primary: "CONTROL",
+        title: "Control Interno Nacional",
+        mission: "En construcción.",
+        hierarchy: "Asistente de node_id = 2"
+      },
+      {
+        id: 4,
+        parentId: 2,
+        level: 3,
+        sublevel: 2,
+        visual_side: "RIGHT",
+        visual_order: 1,
+        node_tag_primary: "ASESOR",
+        title: "Dirección Científica",
+        mission:
+          "Liderar la estrategia científica y clínico-epidemiológica de la empresa, articulando los programas institucionales con las políticas nacionales y según los lineamientos de la Gerencia general.",
+        hierarchy: "Asistente de node_id = 2"
+      },
+      {
+        id: 5,
+        parentId: 2,
+        level: 3,
+        sublevel: 3,
+        visual_side: "RIGHT",
+        visual_order: 2,
+        node_tag_primary: "ASESOR",
+        title: "Equipo jurídico",
+        mission: "En construcción.",
+        hierarchy: "Asistente de node_id = 2"
+      },
+      {
+        id: 6,
+        parentId: 2,
+        level: 3,
+        sublevel: 4,
+        visual_side: "RIGHT",
+        visual_order: 3,
+        node_tag_primary: "ASESOR",
+        title: "Jefatura Nacional de SGI",
+        mission: "En construcción.",
+        hierarchy: "Asistente de node_id = 2"
+      },
+      {
+        id: 8,
+        parentId: 2,
+        level: 4,
+        sublevel: 1,
+        visual_side: "CENTER",
+        visual_order: 1,
+        node_tag_primary: "MISIONAL",
+        title: "Dirección Médica Nacional",
+        mission:
+          "Garantizar la prestación de los servicios habilitados y ofertados en las diferentes sedes de la empresa, de forma estratégica e integral, cumpliendo de esta manera con la responsabilidad contractual adquirida con los clientes y asegurando una atención médica oportuna, pertinente y digna.",
+        hierarchy: "Reporta directamente a node_id = 2, unidireccional"
+      },
+      {
+        id: 10,
+        parentId: 2,
+        level: 4,
+        sublevel: 2,
+        visual_side: "CENTER",
+        visual_order: 2,
+        node_tag_primary: "SOPORTE",
+        title: "Dirección Financiera Nacional",
+        mission: "En construcción.",
+        hierarchy: "Reporta directamente a node_id = 2, unidireccional"
+      },
+      {
+        id: 11,
+        parentId: 2,
+        level: 4,
+        sublevel: 3,
+        visual_side: "CENTER",
+        visual_order: 3,
+        node_tag_primary: "SOPORTE",
+        title: "Jefatura Nacional de Gestión del Talento Humano",
+        mission: "En construcción.",
+        hierarchy: "Reporta directamente a node_id = 2, unidireccional"
+      },
+      {
+        id: 3,
+        parentId: 2,
+        level: 4,
+        sublevel: 4,
+        visual_side: "CENTER",
+        visual_order: 4,
+        node_tag_primary: "ESTRATEGIA",
+        title: "Subgerencia",
+        mission: "En construcción.",
+        hierarchy: "Reporta directamente a node_id = 2, bidireccional"
+      },
+      {
+        id: 9,
+        parentId: 8,
+        level: 5,
+        sublevel: 1,
+        visual_side: "CENTER",
+        visual_order: 1,
+        node_tag_primary: "MISIONAL",
+        title: "Dirección Médica Clínica San Rafael",
+        mission: "En construcción.",
+        hierarchy: "Reporta directamente a node_id = 8, unidireccional"
+      }
+    ];
+
+    (function () {
+      const tooltip = document.getElementById("tooltip");
+      const tooltipRole = document.getElementById("tooltip-role");
+      const tooltipBody = document.getElementById("tooltip-body");
+
+      function showTooltip(event, role, mission) {
+        if (!role || !mission) return;
+        tooltipRole.textContent = role;
+        tooltipBody.textContent = mission;
+        tooltip.classList.add("visible");
+
+        const padding = 12;
+        let x = event.clientX + 14;
+        let y = event.clientY + 18;
+
+        const rect = tooltip.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        if (x + rect.width + padding > vw) {
+          x = event.clientX - rect.width - 14;
+        }
+        if (y + rect.height + padding > vh) {
+          y = event.clientY - rect.height - 14;
+        }
+
+        tooltip.style.left = x + "px";
+        tooltip.style.top = y + "px";
+      }
+
+      function hideTooltip() {
+        tooltip.classList.remove("visible");
+      }
+
+      function resumenMision(mission) {
+        if (!mission) return "";
+        const text = mission.trim();
+        if (text.toLowerCase() === "en construcción.") return "En construcción.";
+        if (text.length <= 50) return text;
+        let cut = text.slice(0, 50);
+        const lastSpace = cut.lastIndexOf(" ");
+        if (lastSpace > 30) cut = cut.slice(0, lastSpace);
+        return cut + "…";
+      }
+
+      function sideRank(side) {
+        switch ((side || "CENTER").toUpperCase()) {
+          case "LEFT":
+            return 0;
+          case "CENTER":
+            return 1;
+          case "RIGHT":
+            return 2;
+          default:
+            return 1;
+        }
+      }
+
+      // =========
+      // RENDER UI
+      // =========
+
+      const nodesById = new Map();
+      const childrenByParent = new Map();
+
+      ORG_DATA.forEach((n) => {
+        nodesById.set(n.id, n);
+        const key = n.parentId == null ? "root" : String(n.parentId);
+        if (!childrenByParent.has(key)) childrenByParent.set(key, []);
+        childrenByParent.get(key).push(n);
+      });
+
+      function createNodeElement(node) {
+        const nodeEl = document.createElement("div");
+        nodeEl.className = "node";
+        nodeEl.dataset.nodeId = node.id;
+        nodeEl.dataset.parentId = node.parentId != null ? node.parentId : "";
+        nodeEl.dataset.nodeLevel = node.level;
+        nodeEl.dataset.sublevel = node.sublevel ?? "";
+        nodeEl.dataset.visualSide = node.visual_side || "CENTER";
+        nodeEl.dataset.visualOrder = node.visual_order ?? "";
+        nodeEl.dataset.nodeTagPrimary = node.node_tag_primary || "";
+        nodeEl.dataset.nodeHierarchy = node.hierarchy || "";
+
+        if (node.parentId != null) {
+          const connector = document.createElement("div");
+          connector.className = "node-connector";
+          nodeEl.appendChild(connector);
+        }
+
+        const card = document.createElement("div");
+        card.className = "node-card";
+        card.dataset.role = node.title;
+        card.dataset.mission = node.mission || "En construcción.";
+
+        const header = document.createElement("div");
+        header.className = "node-card-header";
+
+        const titleEl = document.createElement("div");
+        titleEl.className = "node-title";
+        titleEl.textContent = node.title;
+
+        const tagEl = document.createElement("span");
+        tagEl.className = "node-tag";
+        tagEl.textContent = node.node_tag_primary || "";
+
+        header.appendChild(titleEl);
+        header.appendChild(tagEl);
+
+        const meta = document.createElement("div");
+        meta.className = "node-meta";
+
+        const metaText = document.createElement("span");
+        metaText.className = "node-meta-text";
+        meta.appendChild(metaText);
+
+        card.appendChild(header);
+        card.appendChild(meta);
+
+        nodeEl.appendChild(card);
+
+        // Hijos
+        const childKey = String(node.id);
+        const children = childrenByParent.get(childKey) || [];
+        if (children.length) {
+          nodeEl.classList.add("has-children");
+          buildChildrenRows(nodeEl, node, children);
+        }
+
+        return nodeEl;
+      }
+
+      function buildChildrenRows(parentEl, parentNode, children) {
+        // Agrupar hijos por nivel
+        const groups = {};
+        children.forEach((c) => {
+          const lvl = c.level;
+          if (!groups[lvl]) groups[lvl] = [];
+          groups[lvl].push(c);
+        });
+
+        const levels = Object.keys(groups)
+          .map((n) => parseInt(n, 10))
+          .sort((a, b) => a - b);
+
+        levels.forEach((lvl) => {
+          const row = document.createElement("div");
+          row.classList.add("children-row");
+          row.dataset.hierarchy = "directa";
+
+          // División especial gerencia: hijos nivel 3
+          if (parentNode.id === 2 && parentNode.level === 2 && lvl === 3) {
+            row.classList.add("gerencia-split");
+          }
+
+          const connector = document.createElement("div");
+          connector.className = "children-connector";
+          connector.dataset.hierarchy = "directa";
+          row.appendChild(connector);
+
+          // Etiqueta de nivel a partir de node_level >= 4 (Nivel 1 = 4-3, etc.)
+          if (lvl >= 4) {
+            const label = document.createElement("div");
+            label.className = "level-label";
+            const line = document.createElement("span");
+            line.className = "level-label-line";
+            const text = document.createTextNode("Nivel " + (lvl - 3));
+            label.appendChild(line);
+            label.appendChild(text);
+            row.appendChild(label);
+          }
+
+          const nodes = groups[lvl].slice().sort((a, b) => {
+            const sa = sideRank(a.visual_side);
+            const sb = sideRank(b.visual_side);
+            if (sa !== sb) return sa - sb;
+
+            const oa = parseInt(a.visual_order || 0, 10);
+            const ob = parseInt(b.visual_order || 0, 10);
+            if (oa !== ob) return oa - ob;
+
+            const sla = parseInt(a.sublevel || 0, 10);
+            const slb = parseInt(b.sublevel || 0, 10);
+            return sla - slb;
+          });
+
+          nodes.forEach((child) => {
+            const childEl = createNodeElement(child);
+            row.appendChild(childEl);
+          });
+
+          // Vista inicial: expandir automáticamente niveles de hijos <= 4
+          if (lvl <= 4) {
+            row.classList.add("visible");
+            parentEl.dataset.expanded = "true";
+          } else {
+            parentEl.dataset.expanded = parentEl.dataset.expanded || "false";
+          }
+
+          // Ajustar ancho de conector según número de hijos
+          connector.dataset.children = String(nodes.length);
+
+          parentEl.appendChild(row);
+        });
+      }
+
+      // Construir el organigrama
+      const chartRoot = document.getElementById("org-chart");
+      const topLevel = document.createElement("div");
+      topLevel.className = "level";
+
+      const roots = childrenByParent.get("root") || [];
+      roots
+        .slice()
+        .sort((a, b) => {
+          const oa = parseInt(a.visual_order || 0, 10);
+          const ob = parseInt(b.visual_order || 0, 10);
+          return oa - ob;
+        })
+        .forEach((rootNode) => {
+          const rootEl = createNodeElement(rootNode);
+          topLevel.appendChild(rootEl);
+        });
+
+      chartRoot.appendChild(topLevel);
+
+      // ==========
+      // Interacciones
+      // ==========
+
+      // Orden vertical de asesores en gerencia-split por sublevel
+      document
+        .querySelectorAll(
+          ".gerencia-split .node[data-node-tag-primary='ASESOR']"
+        )
+        .forEach((nodeEl) => {
+          const sub = parseInt(nodeEl.dataset.sublevel || "0", 10);
+          nodeEl.style.order = sub;
+        });
+
+      // Tooltip y resumen corto
+      const nodeCards = document.querySelectorAll(".node-card");
+      nodeCards.forEach((card) => {
+        const role = card.dataset.role;
+        const mission = card.dataset.mission || "En construcción.";
+
+        const metaText = card.querySelector(".node-meta-text");
+        if (metaText) {
+          metaText.textContent = resumenMision(mission);
+        }
+
+        card.addEventListener("mouseenter", (e) => {
+          if (!mission) return;
+          showTooltip(e, role, mission);
+        });
+
+        card.addEventListener("mousemove", (e) => {
+          if (!tooltip.classList.contains("visible")) return;
+          showTooltip(e, role, mission);
+        });
+
+        card.addEventListener("mouseleave", hideTooltip);
+
+        // Expandir / contraer hijos del nodo
+        card.addEventListener("click", () => {
+          const node = card.closest(".node");
+          if (!node) return;
+          const rows = node.querySelectorAll(":scope > .children-row");
+          if (!rows.length) return;
+
+          const isVisible = Array.from(rows).some((r) =>
+            r.classList.contains("visible")
+          );
+          rows.forEach((r) => r.classList.toggle("visible", !isVisible));
+          node.dataset.expanded = !isVisible ? "true" : "false";
+        });
+      });
+
+      hideTooltip();
+
+      // Zoom y paneo
+      const viewport = document.getElementById("chart-viewport");
+      const canvas = document.getElementById("chart-canvas");
+
+      let scale = 1;
+      let translateX = 0;
+      let translateY = 0;
+
+      let isPanning = false;
+      let startX = 0;
+      let startY = 0;
+      let startTX = 0;
+      let startTY = 0;
+
+      function applyTransform() {
+        canvas.style.transform =
+          "translate(" + translateX + "px," + translateY + "px) scale(" + scale + ")";
+      }
+
+      viewport.addEventListener(
+        "wheel",
+        (e) => {
+          e.preventDefault();
+          const rect = viewport.getBoundingClientRect();
+          const offsetX = e.clientX - rect.left;
+          const offsetY = e.clientY - rect.top;
+
+          const zoomIntensity = 0.12;
+          const wheel = e.deltaY < 0 ? 1 : -1;
+          const zoomFactor = 1 + wheel * zoomIntensity;
+
+          const newScale = Math.min(2.2, Math.max(0.6, scale * zoomFactor));
+          if (newScale === scale) return;
+
+          const worldX = (offsetX - translateX) / scale;
+          const worldY = (offsetY - translateY) / scale;
+
+          scale = newScale;
+          translateX = offsetX - worldX * scale;
+          translateY = offsetY - worldY * scale;
+
+          applyTransform();
+        },
+        { passive: false }
+      );
+
+      viewport.addEventListener("mousedown", (e) => {
+        if (e.target.closest(".node-card")) return;
+        isPanning = true;
+        viewport.style.cursor = "grabbing";
+        startX = e.clientX;
+        startY = e.clientY;
+        startTX = translateX;
+        startTY = translateY;
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!isPanning) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        translateX = startTX + dx;
+        translateY = startTY + dy;
+        applyTransform();
+      });
+
+      window.addEventListener("mouseup", () => {
+        isPanning = false;
+        viewport.style.cursor = "default";
+      });
+
+      viewport.addEventListener("mouseleave", () => {
+        isPanning = false;
+        viewport.style.cursor = "default";
+      });
+
+      applyTransform();
+
+      // ==========
+      // Exportar a PDF (paisaje)
+      // ==========
+      const exportBtn = document.getElementById("export-pdf");
+      exportBtn.addEventListener("click", async () => {
+        const shell = document.getElementById("app-shell");
+        const { jsPDF } = window.jspdf || window.jspdf || {};
+
+        if (!jsPDF) {
+          alert("No fue posible cargar jsPDF. Verifique la conexión a internet.");
+          return;
+        }
+
+        // Capturar toda la app-shell (header, organigrama y footer)
+        const canvasPdf = await html2canvas(shell, {
+          scale: 2,
+          useCORS: true
+        });
+
+        const imgData = canvasPdf.toDataURL("image/png");
+        const pdf = new jsPDF("landscape", "pt", "a4");
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        const imgWidth = canvasPdf.width;
+        const imgHeight = canvasPdf.height;
+
+        const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
+
+        const finalWidth = imgWidth * ratio;
+        const finalHeight = imgHeight * ratio;
+
+        const x = (pageWidth - finalWidth) / 2;
+        const y = (pageHeight - finalHeight) / 2;
+
+        pdf.addImage(imgData, "PNG", x, y, finalWidth, finalHeight);
+        pdf.save("organigrama_dumian.pdf");
+      });
+    })();
+  </script>
+</body>
+</html>
