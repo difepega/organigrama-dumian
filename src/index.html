@@ -245,6 +245,15 @@
       position: relative;
     }
 
+    .chart-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
     .org-chart {
       display: flex;
       flex-direction: column;
@@ -252,19 +261,9 @@
       position: relative;
     }
 
-    /* Nivel superior (solo para la raíz) */
-    .level {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 28px;
-      flex-wrap: nowrap;
-      position: relative;
-    }
-
     .level-label {
       position: absolute;
-      left: -80px;
+      left: 8px;
       top: -18px;
       font-size: 11px;
       text-transform: uppercase;
@@ -286,6 +285,16 @@
       );
     }
 
+    .level-row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(220px, 1fr);
+      column-gap: 40px;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+    }
+
     .node {
       position: relative;
       display: flex;
@@ -295,13 +304,7 @@
       min-width: 220px;
       max-width: 260px;
       flex: 0 0 auto;
-    }
-
-    .node-connector {
-      width: 1px;
-      height: 18px;
-      background: rgba(148, 163, 184, 0.7);
-      margin-bottom: 4px;
+      justify-self: center;
     }
 
     .node-card {
@@ -676,6 +679,7 @@
 
       <div class="chart-viewport" id="chart-viewport">
         <div class="chart-canvas" id="chart-canvas">
+          <svg class="chart-lines" id="chart-lines" aria-hidden="true"></svg>
           <section class="org-chart" aria-label="Organigrama de la empresa" id="org-chart">
             <!-- Aquí se inyecta el organigrama dinámicamente desde ORG_DATA -->
           </section>
@@ -702,11 +706,10 @@
     const ORG_DATA = [
       {
         id: 1,
-        parentId: null,
-        level: 1,
-        sublevel: 1,
-        visual_side: "CENTER",
-        visual_order: 1,
+        parent_id: null,
+        node_level: 1,
+        node_side: "CENTER",
+        node_order: 1,
         node_tag_primary: "ESTRATEGIA",
         title: "Asamblea de accionistas",
         mission:
@@ -715,11 +718,10 @@
       },
       {
         id: 2,
-        parentId: 1,
-        level: 2,
-        sublevel: 1,
-        visual_side: "CENTER",
-        visual_order: 1,
+        parent_id: 1,
+        node_level: 2,
+        node_side: "CENTER",
+        node_order: 1,
         node_tag_primary: "ESTRATEGIA",
         title: "Gerencia General",
         mission: "En construcción.",
@@ -727,11 +729,10 @@
       },
       {
         id: 7,
-        parentId: 2,
-        level: 3,
-        sublevel: 1,
-        visual_side: "LEFT",
-        visual_order: 1,
+        parent_id: 2,
+        node_level: 3,
+        node_side: "LEFT",
+        node_order: 1,
         node_tag_primary: "CONTROL",
         title: "Control Interno Nacional",
         mission: "En construcción.",
@@ -739,11 +740,10 @@
       },
       {
         id: 4,
-        parentId: 2,
-        level: 3,
-        sublevel: 2,
-        visual_side: "RIGHT",
-        visual_order: 1,
+        parent_id: 2,
+        node_level: 3,
+        node_side: "RIGHT",
+        node_order: 1,
         node_tag_primary: "ASESOR",
         title: "Dirección Científica",
         mission:
@@ -752,11 +752,10 @@
       },
       {
         id: 5,
-        parentId: 2,
-        level: 3,
-        sublevel: 3,
-        visual_side: "RIGHT",
-        visual_order: 2,
+        parent_id: 2,
+        node_level: 3,
+        node_side: "RIGHT",
+        node_order: 2,
         node_tag_primary: "ASESOR",
         title: "Equipo jurídico",
         mission: "En construcción.",
@@ -764,11 +763,10 @@
       },
       {
         id: 6,
-        parentId: 2,
-        level: 3,
-        sublevel: 4,
-        visual_side: "RIGHT",
-        visual_order: 3,
+        parent_id: 2,
+        node_level: 3,
+        node_side: "RIGHT",
+        node_order: 3,
         node_tag_primary: "ASESOR",
         title: "Jefatura Nacional de SGI",
         mission: "En construcción.",
@@ -776,11 +774,10 @@
       },
       {
         id: 8,
-        parentId: 2,
-        level: 4,
-        sublevel: 1,
-        visual_side: "CENTER",
-        visual_order: 1,
+        parent_id: 2,
+        node_level: 4,
+        node_side: "CENTER",
+        node_order: 1,
         node_tag_primary: "MISIONAL",
         title: "Dirección Médica Nacional",
         mission:
@@ -789,11 +786,10 @@
       },
       {
         id: 10,
-        parentId: 2,
-        level: 4,
-        sublevel: 2,
-        visual_side: "CENTER",
-        visual_order: 2,
+        parent_id: 2,
+        node_level: 4,
+        node_side: "CENTER",
+        node_order: 2,
         node_tag_primary: "SOPORTE",
         title: "Dirección Financiera Nacional",
         mission: "En construcción.",
@@ -801,11 +797,10 @@
       },
       {
         id: 11,
-        parentId: 2,
-        level: 4,
-        sublevel: 3,
-        visual_side: "CENTER",
-        visual_order: 3,
+        parent_id: 2,
+        node_level: 4,
+        node_side: "CENTER",
+        node_order: 3,
         node_tag_primary: "SOPORTE",
         title: "Jefatura Nacional de Gestión del Talento Humano",
         mission: "En construcción.",
@@ -813,11 +808,10 @@
       },
       {
         id: 3,
-        parentId: 2,
-        level: 4,
-        sublevel: 4,
-        visual_side: "CENTER",
-        visual_order: 4,
+        parent_id: 2,
+        node_level: 4,
+        node_side: "CENTER",
+        node_order: 4,
         node_tag_primary: "ESTRATEGIA",
         title: "Subgerencia",
         mission: "En construcción.",
@@ -825,11 +819,10 @@
       },
       {
         id: 9,
-        parentId: 8,
-        level: 5,
-        sublevel: 1,
-        visual_side: "CENTER",
-        visual_order: 1,
+        parent_id: 8,
+        node_level: 5,
+        node_side: "CENTER",
+        node_order: 1,
         node_tag_primary: "MISIONAL",
         title: "Dirección Médica Clínica San Rafael",
         mission: "En construcción.",
@@ -894,54 +887,111 @@
             return 1;
         }
       }
+      function ordenPorSideYOrder(a, b) {
+        const sa = sideRank(a.node_side);
+        const sb = sideRank(b.node_side);
+        if (sa !== sb) return sa - sb;
 
-      // =========
-      // RENDER UI
-      // =========
+        const oa = parseInt(a.node_order || 0, 10);
+        const ob = parseInt(b.node_order || 0, 10);
+        if (oa !== ob) return oa - ob;
 
-      const nodesById = new Map();
-      const childrenByParent = new Map();
+        return String(a.title).localeCompare(String(b.title));
+      }
 
-      ORG_DATA.forEach((n) => {
-        nodesById.set(n.id, n);
-        const key = n.parentId == null ? "root" : String(n.parentId);
-        if (!childrenByParent.has(key)) childrenByParent.set(key, []);
-        childrenByParent.get(key).push(n);
+      function getParentIds(node) {
+        const raw = node.parent_id;
+        if (!raw) return [];
+
+        if (typeof raw === "number") {
+          return [raw];
+        }
+
+        if (typeof raw === "string") {
+          return raw
+            .split(/[,|;]/)
+            .map((v) => parseInt(v.trim(), 10))
+            .filter((v) => !isNaN(v));
+        }
+
+        return [];
+      }
+
+      function buildChildrenMap() {
+        const map = {};
+
+        ORG_DATA.forEach((node) => {
+          const parents = getParentIds(node);
+          parents.forEach((pid) => {
+            if (!map[pid]) map[pid] = [];
+            map[pid].push(node);
+          });
+        });
+
+        return map;
+      }
+
+      function assignColumns(childrenMap) {
+        function walk(node, col) {
+          node.__columnIndex = col;
+          const children = childrenMap[node.id] || [];
+          let localOffset = 0;
+
+          children.forEach((child) => {
+            const childCol = col + localOffset;
+            localOffset++;
+            if (child.__columnIndex == null) {
+              walk(child, childCol);
+            }
+          });
+        }
+
+        const root = ORG_DATA.find((n) => getParentIds(n).length === 0);
+        if (root) {
+          walk(root, 0);
+        }
+      }
+
+      const byId = {};
+      ORG_DATA.forEach((node) => {
+        if (node.isVisible === undefined) node.isVisible = true;
+        if (!node.node_level && node.level) node.node_level = node.level;
+        if (node.parent_id === undefined && node.parentId !== undefined) {
+          node.parent_id = node.parentId;
+        }
+        if (!node.node_side && node.visual_side) node.node_side = node.visual_side;
+        if (!node.node_order && node.visual_order) node.node_order = node.visual_order;
+        byId[node.id] = node;
       });
 
-      function createNodeElement(node) {
+      const childrenMap = buildChildrenMap();
+      assignColumns(childrenMap);
+
+      function crearNodo(nodeData) {
         const nodeEl = document.createElement("div");
         nodeEl.className = "node";
-        nodeEl.dataset.nodeId = node.id;
-        nodeEl.dataset.parentId = node.parentId != null ? node.parentId : "";
-        nodeEl.dataset.nodeLevel = node.level;
-        nodeEl.dataset.sublevel = node.sublevel ?? "";
-        nodeEl.dataset.visualSide = node.visual_side || "CENTER";
-        nodeEl.dataset.visualOrder = node.visual_order ?? "";
-        nodeEl.dataset.nodeTagPrimary = node.node_tag_primary || "";
-        nodeEl.dataset.nodeHierarchy = node.hierarchy || "";
-
-        if (node.parentId != null) {
-          const connector = document.createElement("div");
-          connector.className = "node-connector";
-          nodeEl.appendChild(connector);
-        }
+        nodeEl.dataset.nodeId = nodeData.id;
+        nodeEl.dataset.nodeLevel = nodeData.node_level;
+        nodeEl.dataset.nodeTagPrimary = nodeData.node_tag_primary || "";
+        nodeEl.dataset.nodeHierarchy = nodeData.hierarchy || "";
+        nodeEl.dataset.columnIndex = nodeData.__columnIndex ?? 0;
+        nodeEl.style.gridColumn = (nodeData.__columnIndex ?? 0) + 1;
 
         const card = document.createElement("div");
         card.className = "node-card";
-        card.dataset.role = node.title;
-        card.dataset.mission = node.mission || "En construcción.";
+        card.dataset.role = nodeData.title;
+        card.dataset.mission = nodeData.mission || "En construcción.";
 
         const header = document.createElement("div");
         header.className = "node-card-header";
 
         const titleEl = document.createElement("div");
         titleEl.className = "node-title";
-        titleEl.textContent = node.title;
+        titleEl.textContent = nodeData.title;
 
         const tagEl = document.createElement("span");
         tagEl.className = "node-tag";
-        tagEl.textContent = node.node_tag_primary || "";
+        tagEl.textContent = nodeData.node_tag_primary || "";
 
         header.appendChild(titleEl);
         header.appendChild(tagEl);
@@ -951,6 +1001,7 @@
 
         const metaText = document.createElement("span");
         metaText.className = "node-meta-text";
+        metaText.textContent = resumenMision(card.dataset.mission);
         meta.appendChild(metaText);
 
         card.appendChild(header);
@@ -958,168 +1009,184 @@
 
         nodeEl.appendChild(card);
 
-        // Hijos
-        const childKey = String(node.id);
-        const children = childrenByParent.get(childKey) || [];
-        if (children.length) {
-          nodeEl.classList.add("has-children");
-          buildChildrenRows(nodeEl, node, children);
-        }
-
         return nodeEl;
       }
 
-      function buildChildrenRows(parentEl, parentNode, children) {
-        // Agrupar hijos por nivel
-        const groups = {};
-        children.forEach((c) => {
-          const lvl = c.level;
-          if (!groups[lvl]) groups[lvl] = [];
-          groups[lvl].push(c);
-        });
+      const canvas = document.getElementById("chart-canvas");
 
-        const levels = Object.keys(groups)
-          .map((n) => parseInt(n, 10))
-          .sort((a, b) => a - b);
+      function getAnchors(element, canvasRect) {
+        const card = element.querySelector(".node-card") || element;
+        const rect = card.getBoundingClientRect();
+        return {
+          centerX: rect.left + rect.width / 2 - canvasRect.left,
+          top: rect.top - canvasRect.top,
+          bottom: rect.bottom - canvasRect.top,
+        };
+      }
 
-        levels.forEach((lvl) => {
-          const row = document.createElement("div");
-          row.classList.add("children-row");
-          row.dataset.hierarchy = "directa";
+      function addLine(svg, x1, y1, x2, y2) {
+        const line = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "line"
+        );
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("stroke", "rgba(148, 163, 184, 0.9)");
+        line.setAttribute("stroke-width", "1.5");
+        line.setAttribute("stroke-linecap", "round");
+        svg.appendChild(line);
+      }
 
-          // División especial gerencia: hijos nivel 3
-          if (parentNode.id === 2 && parentNode.level === 2 && lvl === 3) {
-            row.classList.add("gerencia-split");
-          }
+      let lastNodeElementMap = {};
 
-          const connector = document.createElement("div");
-          connector.className = "children-connector";
-          connector.dataset.hierarchy = "directa";
-          row.appendChild(connector);
+      function drawConnections(nodeElementMap) {
+        const svg = document.getElementById("chart-lines");
+        const width = canvas.scrollWidth;
+        const height = canvas.scrollHeight;
+        svg.setAttribute("width", width);
+        svg.setAttribute("height", height);
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        svg.innerHTML = "";
 
-          // Etiqueta de nivel a partir de node_level >= 4 (Nivel 1 = 4-3, etc.)
-          if (lvl >= 4) {
-            const label = document.createElement("div");
-            label.className = "level-label";
-            const line = document.createElement("span");
-            line.className = "level-label-line";
-            const text = document.createTextNode("Nivel " + (lvl - 3));
-            label.appendChild(line);
-            label.appendChild(text);
-            row.appendChild(label);
-          }
+        const canvasRect = canvas.getBoundingClientRect();
 
-          const nodes = groups[lvl].slice().sort((a, b) => {
-            const sa = sideRank(a.visual_side);
-            const sb = sideRank(b.visual_side);
-            if (sa !== sb) return sa - sb;
+        ORG_DATA.forEach((node) => {
+          if (node.isVisible === false) return;
+          const childEl = nodeElementMap[node.id];
+          if (!childEl) return;
 
-            const oa = parseInt(a.visual_order || 0, 10);
-            const ob = parseInt(b.visual_order || 0, 10);
-            if (oa !== ob) return oa - ob;
+          const parents = getParentIds(node);
+          parents.forEach((pid) => {
+            const parentEl = nodeElementMap[pid];
+            if (!parentEl) return;
 
-            const sla = parseInt(a.sublevel || 0, 10);
-            const slb = parseInt(b.sublevel || 0, 10);
-            return sla - slb;
+            const parentCol = parseInt(parentEl.dataset.columnIndex || "0", 10);
+            const childCol = parseInt(childEl.dataset.columnIndex || "0", 10);
+
+            const parentAnchor = getAnchors(parentEl, canvasRect);
+            const childAnchor = getAnchors(childEl, canvasRect);
+
+            if (parentCol === childCol) {
+              addLine(
+                svg,
+                parentAnchor.centerX,
+                parentAnchor.bottom,
+                parentAnchor.centerX,
+                childAnchor.top
+              );
+            } else {
+              const midY =
+                parentAnchor.bottom + (childAnchor.top - parentAnchor.bottom) / 2;
+
+              addLine(
+                svg,
+                parentAnchor.centerX,
+                parentAnchor.bottom,
+                parentAnchor.centerX,
+                midY
+              );
+              addLine(
+                svg,
+                parentAnchor.centerX,
+                midY,
+                childAnchor.centerX,
+                midY
+              );
+              addLine(
+                svg,
+                childAnchor.centerX,
+                midY,
+                childAnchor.centerX,
+                childAnchor.top
+              );
+            }
           });
-
-          nodes.forEach((child) => {
-            const childEl = createNodeElement(child);
-            row.appendChild(childEl);
-          });
-
-          // Vista inicial: expandir automáticamente niveles de hijos <= 4
-          if (lvl <= 4) {
-            row.classList.add("visible");
-            parentEl.dataset.expanded = "true";
-          } else {
-            parentEl.dataset.expanded = parentEl.dataset.expanded || "false";
-          }
-
-          // Ajustar ancho de conector según número de hijos
-          connector.dataset.children = String(nodes.length);
-
-          parentEl.appendChild(row);
         });
       }
 
-      // Construir el organigrama
-      const chartRoot = document.getElementById("org-chart");
-      const topLevel = document.createElement("div");
-      topLevel.className = "level";
+      function bindTooltips() {
+        const nodeCards = document.querySelectorAll(".node-card");
+        nodeCards.forEach((card) => {
+          const role = card.dataset.role;
+          const mission = card.dataset.mission || "En construcción.";
 
-      const roots = childrenByParent.get("root") || [];
-      roots
-        .slice()
-        .sort((a, b) => {
-          const oa = parseInt(a.visual_order || 0, 10);
-          const ob = parseInt(b.visual_order || 0, 10);
-          return oa - ob;
-        })
-        .forEach((rootNode) => {
-          const rootEl = createNodeElement(rootNode);
-          topLevel.appendChild(rootEl);
+          card.addEventListener("mouseenter", (e) => {
+            if (!mission) return;
+            showTooltip(e, role, mission);
+          });
+
+          card.addEventListener("mousemove", (e) => {
+            if (!tooltip.classList.contains("visible")) return;
+            showTooltip(e, role, mission);
+          });
+
+          card.addEventListener("mouseleave", hideTooltip);
         });
 
-      chartRoot.appendChild(topLevel);
+        hideTooltip();
+      }
 
-      // ==========
-      // Interacciones
-      // ==========
+      function renderChart() {
+        const org = document.querySelector(".org-chart");
+        const svg = document.getElementById("chart-lines");
+        org.innerHTML = "";
+        svg.innerHTML = "";
 
-      // Orden vertical de asesores en gerencia-split por sublevel
-      document
-        .querySelectorAll(
-          ".gerencia-split .node[data-node-tag-primary='ASESOR']"
-        )
-        .forEach((nodeEl) => {
-          const sub = parseInt(nodeEl.dataset.sublevel || "0", 10);
-          nodeEl.style.order = sub;
+        const levels = {};
+        ORG_DATA.forEach((node) => {
+          if (node.isVisible === false) return;
+          const lvl = node.node_level;
+          if (!levels[lvl]) levels[lvl] = [];
+          levels[lvl].push(node);
         });
 
-      // Tooltip y resumen corto
-      const nodeCards = document.querySelectorAll(".node-card");
-      nodeCards.forEach((card) => {
-        const role = card.dataset.role;
-        const mission = card.dataset.mission || "En construcción.";
+        const nodeElementMap = {};
 
-        const metaText = card.querySelector(".node-meta-text");
-        if (metaText) {
-          metaText.textContent = resumenMision(mission);
-        }
+        Object.keys(levels)
+          .map((lvl) => parseInt(lvl, 10))
+          .sort((a, b) => a - b)
+          .forEach((lvl) => {
+            const row = document.createElement("div");
+            row.className = "level-row";
+            row.dataset.level = lvl;
 
-        card.addEventListener("mouseenter", (e) => {
-          if (!mission) return;
-          showTooltip(e, role, mission);
-        });
+            if (lvl >= 4) {
+              const label = document.createElement("div");
+              label.className = "level-label";
+              const line = document.createElement("span");
+              line.className = "level-label-line";
+              label.appendChild(line);
+              label.appendChild(document.createTextNode("Nivel " + (lvl - 3)));
+              row.appendChild(label);
+            }
 
-        card.addEventListener("mousemove", (e) => {
-          if (!tooltip.classList.contains("visible")) return;
-          showTooltip(e, role, mission);
-        });
+            levels[lvl]
+              .slice()
+              .sort(ordenPorSideYOrder)
+              .forEach((nodeData) => {
+                const nodeEl = crearNodo(nodeData);
+                nodeElementMap[nodeData.id] = nodeEl;
+                row.appendChild(nodeEl);
+              });
 
-        card.addEventListener("mouseleave", hideTooltip);
+            org.appendChild(row);
+          });
 
-        // Expandir / contraer hijos del nodo
-        card.addEventListener("click", () => {
-          const node = card.closest(".node");
-          if (!node) return;
-          const rows = node.querySelectorAll(":scope > .children-row");
-          if (!rows.length) return;
+        lastNodeElementMap = nodeElementMap;
+        requestAnimationFrame(() => drawConnections(nodeElementMap));
+        bindTooltips();
+      }
 
-          const isVisible = Array.from(rows).some((r) =>
-            r.classList.contains("visible")
-          );
-          rows.forEach((r) => r.classList.toggle("visible", !isVisible));
-          node.dataset.expanded = !isVisible ? "true" : "false";
-        });
+      renderChart();
+
+      window.addEventListener("resize", () => {
+        requestAnimationFrame(() => drawConnections(lastNodeElementMap));
       });
-
-      hideTooltip();
 
       // Zoom y paneo
       const viewport = document.getElementById("chart-viewport");
-      const canvas = document.getElementById("chart-canvas");
 
       let scale = 1;
       let translateX = 0;
